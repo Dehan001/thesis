@@ -16,7 +16,7 @@ import logging
 from datetime import datetime
 from torch.optim import lr_scheduler
 from model import BertGCN, BertGAT
-from sklearn.metrics import accuracy_score, f1_score
+from sklearn.metrics import accuracy_score, f1_score,precision_score,recall_score
 
 
 parser = argparse.ArgumentParser()
@@ -282,17 +282,17 @@ def log_training_results(trainer):
         y_true_test.extend(y_true.cpu().numpy())
         y_pred_test.extend(y_pred.argmax(axis=1).cpu().numpy())
     
-    train_macro_f1 = f1_score(y_true_train, y_pred_train, average='macro')
-    val_macro_f1 = f1_score(y_true_val, y_pred_val, average='macro')
-    test_macro_f1 = f1_score(y_true_test, y_pred_test, average='macro')
+    train_macro_precision = precision_score(y_true_train, y_pred_train, average='macro')
+    val_macro_precision = precision_score(y_true_val, y_pred_val, average='macro')
+    test_macro_precision = precision_score(y_true_test, y_pred_test, average='macro')
     
-    train_f1 = f1_score(y_true_train, y_pred_train, average='weighted')
-    val_f1 = f1_score(y_true_val, y_pred_val, average='weighted')
-    test_f1 = f1_score(y_true_test, y_pred_test, average='weighted')
+    train_recall = recall_score(y_true_train, y_pred_train, average='weighted')
+    val_recall = recall_score(y_true_val, y_pred_val, average='weighted')
+    test_recall = recall_score(y_true_test, y_pred_test, average='weighted')
     
     logger.info(
-        "Epoch: {}  Train acc: {:.4f} loss: {:.4f} macro_F1: {:.4f} F1: {:.4f}  Val acc: {:.4f} loss: {:.4f} macro_F1: {:.4f} F1: {:.4f}  Test acc: {:.4f} loss: {:.4f} macro_F1: {:.4f} F1: {:.4f}"
-        .format(trainer.state.epoch, train_acc, train_nll, train_macro_f1, train_f1, val_acc, val_nll, val_macro_f1 , val_f1, test_acc, test_nll, test_macro_f1,test_f1)
+        "Epoch: {}  Train acc: {:.4f} loss: {:.4f} macro_precision: {:.4f} macro_recall: {:.4f}  Val acc: {:.4f} loss: {:.4f} macro_precision: {:.4f} macro_recall: {:.4f}  Test acc: {:.4f} loss: {:.4f} macro_precision: {:.4f} macro_recall: {:.4f}"
+        .format(trainer.state.epoch, train_acc, train_nll, train_macro_precision, train_recall, val_acc, val_nll, val_macro_precision , val_recall, test_acc, test_nll, test_macro_precision,test_recall)
     )
     if val_acc > log_training_results.best_val_acc:
         logger.info("New checkpoint")
