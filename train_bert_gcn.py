@@ -292,11 +292,12 @@ def log_training_results(trainer):
     # target_names = ['Spelling', 'Correct', 'Multiple Errors','Code Switching','Grammatical']
     # Calculate confusion matrix
     conf_matrix = confusion_matrix(y_true_test, y_pred_test)
-    # Calculate class-wise accuracy
-    class_wise_accuracy = conf_matrix.diagonal() / conf_matrix.sum(axis=1)
-    # Print class-wise accuracy
-    for i in range(5):
-        print(f'Accuracy for {i}: {class_wise_accuracy[i]:.4f}')
+    print(conf_matrix)
+    # # Calculate class-wise accuracy
+    # class_wise_accuracy = conf_matrix.diagonal() / conf_matrix.sum(axis=1)
+    # # Print class-wise accuracy
+    # for i in range(5):
+    #     print(f'Accuracy for {i}: {class_wise_accuracy[i]:.4f}')
 
     
     logger.info(
