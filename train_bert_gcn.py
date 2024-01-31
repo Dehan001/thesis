@@ -293,7 +293,7 @@ def log_training_results(trainer):
     # Calculate confusion matrix
     conf_matrix = confusion_matrix(y_true_test, y_pred_test)
     print(conf_matrix)
-    print(y_pred_test)
+    print(y_true_test)
     # Calculate class-wise accuracy
     class_wise_accuracy = conf_matrix.diagonal() / conf_matrix.sum(axis=1)
     # Print class-wise accuracy
