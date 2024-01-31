@@ -291,7 +291,7 @@ def log_training_results(trainer):
     test_recall = recall_score(y_true_test, y_pred_test, average='weighted')
     # target_names = ['Spelling', 'Correct', 'Multiple Errors','Code Switching','Grammatical']
     # Calculate confusion matrix
-    conf_matrix = confusion_matrix(y_true, y_pred)
+    conf_matrix = confusion_matrix(y_true_test, y_pred_test)
     # Calculate class-wise accuracy
     class_wise_accuracy = conf_matrix.diagonal() / conf_matrix.sum(axis=1)
     # Print class-wise accuracy
