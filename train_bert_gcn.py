@@ -289,7 +289,7 @@ def log_training_results(trainer):
     train_recall = recall_score(y_true_train, y_pred_train, average='weighted')
     val_recall = recall_score(y_true_val, y_pred_val, average='weighted')
     test_recall = recall_score(y_true_test, y_pred_test, average='weighted')
-    target_names = ['Multiple Errors','Spelling','Correct','Code Switching','Grammatical']
+    target_names = ['Spelling','Correct','Multiple Errors','Code Switching','Grammatical']
     # Calculate confusion matrix
     conf_matrix = confusion_matrix(y_true_test, y_pred_test)
     print(conf_matrix)
