@@ -16,7 +16,7 @@ import logging
 from datetime import datetime
 from torch.optim import lr_scheduler
 from model import BertGCN, BertGAT
-from sklearn.metrics import accuracy_score, f1_score,precision_score,recall_score
+from sklearn.metrics import accuracy_score, f1_score,precision_score,recall_score,confusion_matrix
 
 
 parser = argparse.ArgumentParser()
@@ -289,6 +289,15 @@ def log_training_results(trainer):
     train_recall = recall_score(y_true_train, y_pred_train, average='weighted')
     val_recall = recall_score(y_true_val, y_pred_val, average='weighted')
     test_recall = recall_score(y_true_test, y_pred_test, average='weighted')
+    target_names = ['Spelling', 'Correct', 'Multiple Errors','Code Switching','Grammatical']
+    # Calculate confusion matrix
+    conf_matrix = confusion_matrix(y_true, y_pred)
+    # Calculate class-wise accuracy
+    class_wise_accuracy = conf_matrix.diagonal() / conf_matrix.sum(axis=1)
+    # Print class-wise accuracy
+    for i, class_name in enumerate(target_names):
+        print(f'Accuracy for {class_name}: {class_wise_accuracy[i]:.4f}')
+
     
     logger.info(
         "Epoch: {}  Train acc: {:.4f} loss: {:.4f} macro_precision: {:.4f} macro_recall: {:.4f}  Val acc: {:.4f} loss: {:.4f} macro_precision: {:.4f} macro_recall: {:.4f}  Test acc: {:.4f} loss: {:.4f} macro_precision: {:.4f} macro_recall: {:.4f}"
