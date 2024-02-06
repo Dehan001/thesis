@@ -305,7 +305,7 @@ def log_training_results(trainer):
     class_wise_precision = [report[str(cls)]['precision'] for cls in range(len(conf_matrix))]
     class_wise_recall = [report[str(cls)]['recall'] for cls in range(len(conf_matrix))]
     # Calculate F1 Score
-    class_wise_f1_score = [2 * (precision * recall) / (precision + recall+1)
+    class_wise_f1_score = [(2 * (precision * recall)+1) / (precision + recall+1)
                            for precision, recall in zip(class_wise_precision, class_wise_recall)]
     # Print class-wise F1 Scores
     for cls, f1_score in enumerate(class_wise_f1_score):
