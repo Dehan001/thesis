@@ -16,7 +16,7 @@ import logging
 from datetime import datetime
 from torch.optim import lr_scheduler
 from model import BertGCN, BertGAT
-from sklearn.metrics import accuracy_score, f1_score,precision_score,recall_score,confusion_matrix
+from sklearn.metrics import accuracy_score, f1_score,precision_score,recall_score,confusion_matrix,classification_report
 
 
 parser = argparse.ArgumentParser()
@@ -289,17 +289,27 @@ def log_training_results(trainer):
     train_recall = recall_score(y_true_train, y_pred_train, average='weighted')
     val_recall = recall_score(y_true_val, y_pred_val, average='weighted')
     test_recall = recall_score(y_true_test, y_pred_test, average='weighted')
-    target_names = ['Spelling','Correct','Multiple Errors','Code Switching','Grammatical']
-    # Calculate confusion matrix
+    # target_names = ['Spelling','Correct','Multiple Errors','Code Switching','Grammatical']
+    # # Calculate confusion matrix
     conf_matrix = confusion_matrix(y_true_test, y_pred_test)
-    print(conf_matrix)
-    print(y_true_test)
-    # Calculate class-wise accuracy
-    class_wise_accuracy = conf_matrix.diagonal() / conf_matrix.sum(axis=1)
-    # Print class-wise accuracy
-    for i,target in enumerate(target_names):
-        print(f'Accuracy for {target}: {class_wise_accuracy[i]:.4f}')
-
+    # print(conf_matrix)
+    # print(y_true_test)
+    # # Calculate class-wise accuracy
+    # class_wise_accuracy = conf_matrix.diagonal() / conf_matrix.sum(axis=1)
+    # # Print class-wise accuracy
+    # for i,target in enumerate(target_names):
+    #     print(f'Accuracy for {target}: {class_wise_accuracy[i]:.4f}')
+    report = classification_report(y_true_test, y_pred_test, output_dict=True)
+    print('Classification Report:\n' , report)
+    # Extract class-wise metrics
+    class_wise_precision = [report[str(cls)]['precision'] for cls in range(len(conf_matrix))]
+    class_wise_recall = [report[str(cls)]['recall'] for cls in range(len(conf_matrix))]
+    # Calculate F1 Score
+    class_wise_f1_score = [2 * (precision * recall) / (precision + recall)
+                           for precision, recall in zip(class_wise_precision, class_wise_recall)]
+    # Print class-wise F1 Scores
+    for cls, f1_score in enumerate(class_wise_f1_score):
+        print(f"Class {cls} F1 Score: {f1_score}")
     
     logger.info(
         "Epoch: {}  Train acc: {:.4f} loss: {:.4f} macro_precision: {:.4f} macro_recall: {:.4f}  Val acc: {:.4f} loss: {:.4f} macro_precision: {:.4f} macro_recall: {:.4f}  Test acc: {:.4f} loss: {:.4f} macro_precision: {:.4f} macro_recall: {:.4f}"
