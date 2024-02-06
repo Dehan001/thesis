@@ -213,6 +213,7 @@ for doc_meta in shuffle_doc_name_list:
     temp = doc_meta.split('\t')
     label_set.add(temp[2])
 label_list = list(label_set)
+print(label_list)
 
 label_list_str = '\n'.join(label_list)
 f = open('data/corpus/' + dataset + '_labels.txt', 'w')
